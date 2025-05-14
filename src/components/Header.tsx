@@ -68,7 +68,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { supabase } from "@/utils/supabaseClient";
+import { createClient } from "@/utils/supabaseClient";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
@@ -80,12 +80,12 @@ const Header = () => {
     const fetchUser = async () => {
       const {
         data: { session },
-      } = await supabase.auth.getSession();
+      } = await createClient().auth.getSession();
       setUser(session?.user || null);
     };
     fetchUser();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
+    const { data: listener } = createClient().auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
       }
@@ -99,7 +99,7 @@ const Header = () => {
   const goToDashboard = async () => {
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+    } = await createClient().auth.getUser();
     const role = user?.user_metadata?.role;
 
     if (role === "admin") router.push("/admin");
@@ -108,7 +108,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await createClient().auth.signOut();
     setUser(null);
     router.push("/");
   };

@@ -292,7 +292,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { supabase } from "@/utils/supabaseClient";
+import { createClient } from "@/utils/supabaseClient";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -321,7 +321,7 @@ const Signup = () => {
 
     const { name, email, password, role } = userData;
 
-    const { error } = await supabase.auth.signUp({
+    const { error } = await createClient().auth.signUp({
       email,
       password,
       options: {
@@ -343,7 +343,7 @@ const Signup = () => {
   };
 
   const handleGoogleSignup = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await createClient().auth.signInWithOAuth({
       provider: "google",
     });
 
